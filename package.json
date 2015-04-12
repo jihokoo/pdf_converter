@@ -5,8 +5,8 @@
   "main": "index.js",
   "author": "Ji Ho Koo <jihokoo@gmail.com> (http://jihokoo.com/)",
   "dependencies": {
-    "hapi": "^6.5.1",
-    "joi": "^4.7.0"
+    "hapi": "^8.4.0",
+    "joi": "^6.1.1"
   },
   "directories": {
     "test": "test"
@@ -16,6 +16,7 @@
     "lab": "^5.5.1"
   },
   "scripts": {
+    "start": "node .",
     "test": "./node_modules/lab/bin/lab -c"
   },
   "repository": {

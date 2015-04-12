@@ -17,7 +17,7 @@
   },
   "scripts": {
     "start": "node .",
-    "test": "./node_modules/lab/bin/lab -c"
+    "test": "./node_modules/lab/bin/lab -c -v"
   },
   "repository": {
     "type": "git",

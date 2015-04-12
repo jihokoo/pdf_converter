@@ -12,6 +12,7 @@
     "test": "test"
   },
   "devDependencies": {
+    "code": "^1.4.0",
     "lab": "^5.5.1"
   },
   "scripts": {

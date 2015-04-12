@@ -1,11 +1,29 @@
 {
   "name": "thumb_coding_challenge",
   "version": "0.0.0",
-  "description": "",
+  "description": "lob interview project",
   "main": "index.js",
-  "author": "",
+  "author": "Ji Ho Koo <jihokoo@gmail.com> (http://jihokoo.com/)",
   "dependencies": {
     "hapi": "^6.5.1",
     "joi": "^4.7.0"
-  }
+  },
+  "directories": {
+    "test": "test"
+  },
+  "devDependencies": {
+    "lab": "^5.5.1"
+  },
+  "scripts": {
+    "test": "./node_modules/lab/bin/lab -c"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jihokoo/thumb_coding_challenge.git"
+  },
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jihokoo/thumb_coding_challenge/issues"
+  },
+  "homepage": "https://github.com/jihokoo/thumb_coding_challenge"
 }

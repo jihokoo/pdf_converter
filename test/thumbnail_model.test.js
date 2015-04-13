@@ -71,6 +71,8 @@ lab.experiment('Thumbnail', function() {
     Thumbnail.findOne({name: "LobLogo_thumb_1"}, function(err, thumbnail) {
       var jsonThumbnail = thumbnail.asJSON();
       code.expect(jsonThumbnail).to.match(/"name":"LobLogo_thumb_1"/);
+
+      done();
     });
   });
 });

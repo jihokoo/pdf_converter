@@ -1,18 +1,9 @@
-var mongoose = require("mongoose"),
-  Thumbnail = mongoose.model("Thumbnail");
+var ThumbnailHandler = require("../app/handlers/thumbnail.js");
 
 var routes = {
   path: "/thumbs",
   method: "GET",
-  handler: function(requst, reply) {
-    Thumbnail.find(function(err, thumbnails) {
-      if (err) {
-        reply(500, err);
-      } else {
-        reply(thumbnails);
-      }
-    });
-  }
+  handler: ThumbnailHandler.getAll
 };
 
 module.exports = routes;

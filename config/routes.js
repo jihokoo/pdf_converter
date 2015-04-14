@@ -16,7 +16,14 @@ var routes = [
   {
     path: "/thumbs/{fileName}",
     method: "GET",
-    handler: ThumbnailHandler.viewThumbnail
+    handler: ThumbnailHandler.viewThumbnail,
+    config: {
+      validate: {
+        params: {
+          fileName: Joi.string().min(1).regex(/^.*\.(png)$/)
+        }
+      }
+    }
   },
   {
     path: "/thumbs",

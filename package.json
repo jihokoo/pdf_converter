@@ -19,8 +19,8 @@
     "lab": "^5.5.1"
   },
   "scripts": {
-    "start": "node .",
-    "test": "./node_modules/lab/bin/lab -c -v -m 10000"
+    "start": "rm -rf public && mkdir public public/files public/thumbnails && node .",
+    "test": "rm -rf public && mkdir public public/files public/thumbnails && ./node_modules/lab/bin/lab -c -v -m 10000"
   },
   "repository": {
     "type": "git",

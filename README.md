@@ -1,5 +1,11 @@
 ## PDF to Thumbnail Converter
 
+####Instructions:
+
+- install npm dependencies `npm install`
+- test server `npm test` (script will create folders that we need)
+- start server `npm start` (script will create folders that we need)
+
 ####NPM Dependencies:
 
 - hapi

@@ -201,7 +201,6 @@ lab.experiment("Thumbnails Controller", function() {
           'Content-Type': 'multipart/form-data; boundary='+ boundary
       };
 
-      // set payload for multipart/form-data with correct fields
       var payload = '--'+ boundary +'\r\n' +
         'Content-Disposition: form-data; name="file"; filename="test.docx"\r\n' +
         'Content-Type: application/pdf\r\n' +

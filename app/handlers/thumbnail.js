@@ -90,7 +90,7 @@ function create (request, reply) {
 
           fileNames.forEach(function(fileName) {
             if (fileName.length > 0) {
-              uploadAndRemoveLocal(fileName);
+              uploadToAWS(fileName); // upload thumbnail to aws s3 bucket
             }
           });
         }
@@ -99,7 +99,7 @@ function create (request, reply) {
   });
 }
 
-function uploadAndRemoveLocal (fileName) {
+function uploadToAWS (fileName) {
   var filePath = "./public/thumbnails/" + fileName;
 
   var fileStream = fs.createReadStream(filePath);

@@ -7,7 +7,7 @@
 - code
 - lab
 - aws-sdk
-- mongoose
+- mongoose (make sure mongo is installed and running)
 - handlebars
 
 ####Command Line Tools:

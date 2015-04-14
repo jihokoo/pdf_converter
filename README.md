@@ -12,8 +12,8 @@
 
 ####Command Line Tools:
 
-- imageMagick
-- ghostscript
+- imageMagick (`brew install imagemagick`)
+- ghostscript (`brew install ghostscript`)
 - grep
 
 ####Thumbnail:

@@ -1,17 +1,14 @@
 var Hapi = require('hapi'),
-  Joi  = require('joi'),
   fs = require('fs'),
   routes;
 
 var server = new Hapi.Server();
 
 // Load configurations
-// if test env, load example file
 var env = process.env.NODE_ENV || 'development',
   config = require('./config/config')[env],
   mongoose = require('mongoose');
 
-// Bootstrap db connection
 // Connect to mongodb
 var connect = function () {
   var options = { server: { socketOptions: { keepAlive: 1 } } };

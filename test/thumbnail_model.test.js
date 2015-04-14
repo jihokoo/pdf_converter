@@ -12,17 +12,15 @@ lab.experiment('Thumbnail', function() {
     Thumbnail.collection.remove(done);
   });
 
-  lab.test('should have name, url, and originalFileURL fields of String', function(done) {
+  lab.test('should have name and url fields of String', function(done) {
     var validThumbnail = new Thumbnail({
       name: "LobLogo_thumb_1",
-      url: "https://s3-us-west-1.amazonaws.com/jihokoo-miscellaneous/Thumbnails/LobLogo_thumb_1.png",
-      originalFileURL: "https://s3-us-west-1.amazonaws.com/jihokoo-miscellaneous/Files/LobLogo.pdf"
+      url: "https://s3-us-west-1.amazonaws.com/jihokoo-miscellaneous/Thumbnails/LobLogo_thumb_1.png"
     });
 
     validThumbnail.save(function(err, thumbnail) {
       code.expect(thumbnail.name).to.equal("LobLogo_thumb_1");
       code.expect(thumbnail.url).to.equal("https://s3-us-west-1.amazonaws.com/jihokoo-miscellaneous/Thumbnails/LobLogo_thumb_1.png");
-      code.expect(thumbnail.originalFileURL).to.equal("https://s3-us-west-1.amazonaws.com/jihokoo-miscellaneous/Files/LobLogo.pdf");
 
       done();
     });
@@ -30,8 +28,7 @@ lab.experiment('Thumbnail', function() {
 
   lab.test("should require name", function(done) {
     var invalidThumbnail = new Thumbnail({
-      url: "https://s3-us-west-1.amazonaws.com/jihokoo-miscellaneous/Thumbnails/LobLogo_thumb_1.png",
-      originalFileURL: "https://s3-us-west-1.amazonaws.com/jihokoo-miscellaneous/Files/LobLogo.pdf"
+      url: "https://s3-us-west-1.amazonaws.com/jihokoo-miscellaneous/Thumbnails/LobLogo_thumb_1.png"
     });
 
     invalidThumbnail.save(function(err) {
@@ -43,21 +40,7 @@ lab.experiment('Thumbnail', function() {
 
   lab.test("should require url", function(done) {
     var invalidThumbnail = new Thumbnail({
-      name: "LobLogo_thumb_1",
-      originalFileURL: "https://s3-us-west-1.amazonaws.com/jihokoo-miscellaneous/Files/LobLogo.pdf"
-    });
-
-    invalidThumbnail.save(function(err) {
-      code.expect(err.message).to.equal("Thumbnail validation failed");
-
-      done();
-    });
-  });
-
-  lab.test("should require originalFileURL", function(done) {
-    var invalidThumbnail = new Thumbnail({
-      name: "LobLogo_thumb_1",
-      url: "https://s3-us-west-1.amazonaws.com/jihokoo-miscellaneous/Thumbnails/LobLogo_thumb_1.png"
+      name: "LobLogo_thumb_1"
     });
 
     invalidThumbnail.save(function(err) {

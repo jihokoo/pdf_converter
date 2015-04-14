@@ -5,15 +5,13 @@ var mongoose = require('mongoose'),
 var ThumbnailSchema = new Schema({
   name: {
     type: String,
-    required: true
+    required: true,
+    unique: true
   },
   url: {
     type: String,
-    required: true
-  },
-  originalFileURL: {
-    type: String,
-    required: true
+    required: true,
+    unique: true
   }
 });
 

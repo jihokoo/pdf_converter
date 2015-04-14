@@ -1,6 +1,7 @@
 var Lab = require("lab"),
   code = require("code"),
   mongoose = require("mongoose"),
+  fs = require("fs"),
   server = require("../server");
 
 var lab = exports.lab = Lab.script();
@@ -15,8 +16,7 @@ lab.experiment("Thumbnails Controller", function() {
 
   lab.experiment("GET /thumbs", function() {
 
-    lab.test("should reply with Content-Type text/json",
-      function(done) {
+    lab.test("should reply with Content-Type text/json", function(done) {
         var options = {
           method: "GET",
           url: "/thumbs"
@@ -36,8 +36,7 @@ lab.experiment("Thumbnails Controller", function() {
     lab.test("should reply with a thumbnail if there is one in the DB", function(done) {
       var thumbnailOne = new Thumbnail({
         name: "LobLogo_thumb_1",
-        url: "https://s3-us-west-1.amazonaws.com/jihokoo-miscellaneous/Thumbnails/LobLogo_thumb_1.png",
-        originalFileURL: "https://s3-us-west-1.amazonaws.com/jihokoo-miscellaneous/Files/LobLogo.pdf"
+        url: "https://s3-us-west-1.amazonaws.com/jihokoo-miscellaneous/Thumbnails/LobLogo_thumb_1.png"
       });
 
       thumbnailOne.save(function(err) {
@@ -65,8 +64,7 @@ lab.experiment("Thumbnails Controller", function() {
     lab.test("should be able to reply with multiple thumbnails", function(done) {
       var thumbnailTwo = new Thumbnail({
         name: "LobLogo_thumb_2",
-        url: "https://s3-us-west-1.amazonaws.com/jihokoo-miscellaneous/Thumbnails/LobLogo_thumb_2.png",
-        originalFileURL: "https://s3-us-west-1.amazonaws.com/jihokoo-miscellaneous/Files/LobLogo.pdf"
+        url: "https://s3-us-west-1.amazonaws.com/jihokoo-miscellaneous/Thumbnails/LobLogo_thumb_2.png"
       });
 
       thumbnailTwo.save(function(err) {
@@ -92,5 +90,53 @@ lab.experiment("Thumbnails Controller", function() {
       });
     });
   });
+
+  lab.experiment("POST /thumbs", function() {
+
+    lab.test("should be able to create new Thumbnails", function(done) {
+
+      var file = fs.readFileSync('./test.pdf');
+      var boundary = Math.random();
+
+      var payload = '--'+ boundary +'\r\n' +
+        'Content-Disposition: form-data; name="file"; filename="test.pdf"\r\n' +
+        'Content-Type: application/pdf\r\n' +
+        '\r\n' +
+        file + '\r\n' +
+        '--'+ boundary +'--';
+
+      var headers = {
+          'Content-Type': 'multipart/form-data; boundary='+ boundary
+      };
+
+      var options = {
+        method: "POST",
+        url: "/thumbs",
+        headers: headers,
+        payload: payload
+      };
+
+      server.inject(options, function(response) {
+        // file data isn't being loaded correctly
+        var result = response.result;
+
+        code.expect('Content-Type', /json/);
+        code.expect(response.statusCode).to.equal(200);
+        code.expect(result).to.be.instanceof(Array);
+        code.expect(result.length).to.be.above(0);
+
+        var thumbnailOne = result[0];
+        var thumbnailTwo = result[1];
+
+        code.expect(thumbnailOne.name).to.equal("test_thumb_0.png");
+        code.expect(thumbnailOne.url).to.equal("https://s3-us-west-1.amazonaws.com/jihokoo-miscellaneous/Thumbnails/test_thumb_0.png");
+        code.expect(thumbnailTwo.name).to.equal("test_thumb_1.png");
+        code.expect(thumbnailTwo.url).to.equal("https://s3-us-west-1.amazonaws.com/jihokoo-miscellaneous/Thumbnails/test_thumb_1.png");
+        done();
+      });
+    });
+
+  });
+
 });
 

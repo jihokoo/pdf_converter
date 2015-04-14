@@ -1,5 +1,5 @@
 function render (request, reply) {
-  reply.file('./app/views/index.html');
+  reply.view('index');
 }
 
 module.exports = {

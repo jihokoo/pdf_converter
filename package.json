@@ -6,6 +6,7 @@
   "author": "Ji Ho Koo <jihokoo@gmail.com> (http://jihokoo.com/)",
   "dependencies": {
     "aws-sdk": "^2.1.23",
+    "handlebars": "^3.0.1",
     "hapi": "^8.4.0",
     "joi": "^6.1.1",
     "mongoose": "^4.0.1"

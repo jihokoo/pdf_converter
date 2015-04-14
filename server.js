@@ -41,6 +41,11 @@ server.connection({
   port: config.port
 });
 
+server.views({
+  engines: {html: require('handlebars')},
+  path: __dirname + '/app/views'
+});
+
 routes = require('./config/routes');
 
 server.route(routes);

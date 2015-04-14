@@ -4,6 +4,7 @@ var Lab = require("lab"),
   fs = require("fs"),
   server = require("../server");
 
+var exec = require("child_process").exec;
 var lab = exports.lab = Lab.script();
 
 var Thumbnail = mongoose.model("Thumbnail");
@@ -11,7 +12,15 @@ var Thumbnail = mongoose.model("Thumbnail");
 lab.experiment("Thumbnails Controller", function() {
 
   lab.before(function(done) {
+    // make sure to have empty db before test
     Thumbnail.collection.remove(done);
+  });
+
+  lab.after(function(done) {
+    // make sure to delete thumbnails
+    exec("rm -rf ./public/thumbnails/*", function(){
+      done();
+    });
   });
 
   lab.experiment("GET /thumbs", function() {
@@ -97,19 +106,20 @@ lab.experiment("Thumbnails Controller", function() {
 
     lab.test("should be able to create new Thumbnails", function(done) {
 
-      var file = fs.readFileSync('./test.pdf');
+      var file = fs.readFileSync('./test.pdf'); // read in test pdf file
       var boundary = Math.random();
 
+      var headers = {
+          'Content-Type': 'multipart/form-data; boundary='+ boundary
+      };
+
+      // set payload for multipart/form-data with correct fields
       var payload = '--'+ boundary +'\r\n' +
         'Content-Disposition: form-data; name="file"; filename="test.pdf"\r\n' +
         'Content-Type: application/pdf\r\n' +
         '\r\n' +
         file + '\r\n' +
         '--'+ boundary +'--';
-
-      var headers = {
-          'Content-Type': 'multipart/form-data; boundary='+ boundary
-      };
 
       var options = {
         method: "POST",
@@ -119,7 +129,6 @@ lab.experiment("Thumbnails Controller", function() {
       };
 
       server.inject(options, function(response) {
-        // file data isn't being loaded correctly
         var result = response.result;
 
         code.expect('Content-Type', /json/);

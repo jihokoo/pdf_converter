@@ -4,7 +4,6 @@ var mongoose = require("mongoose"),
   exec = require("child_process").exec,
   Thumbnail = mongoose.model("Thumbnail");
 
-// Module to stream files to s3
 // Upload to s3 to avoid storing locally and taking up space
 var AWS = require('aws-sdk');
 AWS.config.loadFromPath('./config/s3_config.json');
@@ -108,15 +107,15 @@ function uploadAndRemoveLocal (fileName) {
     Key: "Thumbnails/" + fileName,
     Body: fileStream,
     ContentEncoding: 'base64',
-    ContentType: 'image/png'
+    ContentType: 'image/png' // so aws lets us view image
   };
 
-  s3Bucket.putObject(data, function(err, data){
+  s3Bucket.putObject(data, function(err){
       if (err) {
         console.err("upload", err);
       }
 
-      removeLocal(filePath);
+      removeLocal(filePath); // remove thumbnails stored locally
   });
 }
 

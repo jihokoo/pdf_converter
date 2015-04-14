@@ -36,7 +36,8 @@ lab.experiment("Thumbnails Controller", function() {
     lab.test("should reply with a thumbnail if there is one in the DB", function(done) {
       var thumbnailOne = new Thumbnail({
         name: "LobLogo_thumb_1",
-        url: "https://s3-us-west-1.amazonaws.com/jihokoo-miscellaneous/Thumbnails/LobLogo_thumb_1.png"
+        url: "http://localhost:8000/thumbs/LobLogo_thumb_1.png",
+        imageUrl: "https://s3-us-west-1.amazonaws.com/jihokoo-miscellaneous/Thumbnails/LobLogo_thumb_1.png"
       });
 
       thumbnailOne.save(function(err) {
@@ -64,7 +65,8 @@ lab.experiment("Thumbnails Controller", function() {
     lab.test("should be able to reply with multiple thumbnails", function(done) {
       var thumbnailTwo = new Thumbnail({
         name: "LobLogo_thumb_2",
-        url: "https://s3-us-west-1.amazonaws.com/jihokoo-miscellaneous/Thumbnails/LobLogo_thumb_2.png"
+        url: "http://localhost:8000/thumbs/LobLogo_thumb_2.png",
+        imageUrl: "https://s3-us-west-1.amazonaws.com/jihokoo-miscellaneous/Thumbnails/LobLogo_thumb_2.png"
       });
 
       thumbnailTwo.save(function(err) {
@@ -129,9 +131,9 @@ lab.experiment("Thumbnails Controller", function() {
         var thumbnailTwo = result[1];
 
         code.expect(thumbnailOne.name).to.equal("test_thumb_0.png");
-        code.expect(thumbnailOne.url).to.equal("https://s3-us-west-1.amazonaws.com/jihokoo-miscellaneous/Thumbnails/test_thumb_0.png");
+        code.expect(thumbnailOne.url).to.equal("http://localhost:8000/thumbs/test_thumb_0.png");
         code.expect(thumbnailTwo.name).to.equal("test_thumb_1.png");
-        code.expect(thumbnailTwo.url).to.equal("https://s3-us-west-1.amazonaws.com/jihokoo-miscellaneous/Thumbnails/test_thumb_1.png");
+        code.expect(thumbnailTwo.url).to.equal("http://localhost:8000/thumbs/test_thumb_1.png");
         done();
       });
     });

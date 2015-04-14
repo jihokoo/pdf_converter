@@ -14,6 +14,11 @@ var routes = [
     handler: ThumbnailHandler.getAll
   },
   {
+    path: "/thumbs/{fileName}",
+    method: "GET",
+    handler: ThumbnailHandler.viewThumbnail
+  },
+  {
     path: "/thumbs",
     method: "POST",
     handler: ThumbnailHandler.create,

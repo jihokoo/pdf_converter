@@ -5,18 +5,34 @@ var mongoose = require("mongoose"),
   Thumbnail = mongoose.model("Thumbnail");
 
 // Module to stream files to s3
+// Upload to s3 to avoid storing locally and taking up space
 var AWS = require('aws-sdk');
 AWS.config.loadFromPath('./s3_config.json');
 var s3Bucket = new AWS.S3( { params: {Bucket: 'jihokoo-miscellaneous'} } );
 
-var s3ThumbnailURL = "https://s3-us-west-1.amazonaws.com/jihokoo-miscellaneous/Thumbnails/";
+var s3ThumbnailUrl = "https://s3-us-west-1.amazonaws.com/jihokoo-miscellaneous/Thumbnails/";
+var localUrl = "http://localhost:8000/thumbs/";
 
 function getAll (request, reply) {
-  Thumbnail.find(function(err, thumbnails) {
+  Thumbnail.find().select('-_id -__v').exec(function(err, thumbnails) {
     if (err) {
       reply(500, err);
     } else {
       reply(thumbnails);
+    }
+  });
+}
+
+function viewThumbnail (request, reply) {
+  Thumbnail.findOne({name: request.params.fileName}).select('+imageUrl').exec(function(err, thumbnail) {
+    if (err) {
+      reply(500, err);
+    } else {
+      var context = {
+        imageUrl: thumbnail.imageUrl
+      };
+
+      reply.view('thumbnail', context);
     }
   });
 }
@@ -57,7 +73,8 @@ function create (request, reply) {
             if (fileName.length > 0) {
               thumbnail = {
                 name: fileName,
-                url: s3ThumbnailURL + fileName
+                url: localUrl + fileName,
+                imageUrl: s3ThumbnailUrl + fileName
               };
 
               thumbnails.push(thumbnail);
@@ -113,5 +130,6 @@ function removeLocal (filePath) {
 
 module.exports = {
   getAll: getAll,
-  create: create
+  create: create,
+  viewThumbnail: viewThumbnail
 };

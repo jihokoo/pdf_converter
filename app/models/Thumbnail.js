@@ -12,6 +12,12 @@ var ThumbnailSchema = new Schema({
     type: String,
     required: true,
     unique: true
+  },
+  imageUrl: {
+    type: String,
+    required: true,
+    unique: true,
+    select: false // hide this field to match the problem description
   }
 });
 

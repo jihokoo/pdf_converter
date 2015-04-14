@@ -15,12 +15,13 @@ lab.experiment('Thumbnail', function() {
   lab.test('should have name and url fields of String', function(done) {
     var validThumbnail = new Thumbnail({
       name: "LobLogo_thumb_1",
-      url: "https://s3-us-west-1.amazonaws.com/jihokoo-miscellaneous/Thumbnails/LobLogo_thumb_1.png"
+      url: "http://localhost:8000/thumbs/LobLogo_thumb_1.png",
+      imageUrl: "https://s3-us-west-1.amazonaws.com/jihokoo-miscellaneous/Thumbnails/LobLogo_thumb_1.png"
     });
 
     validThumbnail.save(function(err, thumbnail) {
       code.expect(thumbnail.name).to.equal("LobLogo_thumb_1");
-      code.expect(thumbnail.url).to.equal("https://s3-us-west-1.amazonaws.com/jihokoo-miscellaneous/Thumbnails/LobLogo_thumb_1.png");
+      code.expect(thumbnail.url).to.equal("http://localhost:8000/thumbs/LobLogo_thumb_1.png");
 
       done();
     });

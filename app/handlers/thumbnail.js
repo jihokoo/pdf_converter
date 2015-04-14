@@ -1,4 +1,5 @@
-var mongoose = require("mongoose"),
+var Boom = require("boom"),
+  mongoose = require("mongoose"),
   path = require("path"),
   fs = require("fs"),
   exec = require("child_process").exec,
@@ -13,9 +14,10 @@ var s3ThumbnailUrl = "https://s3-us-west-1.amazonaws.com/jihokoo-miscellaneous/T
 var localUrl = "http://localhost:8000/thumbs/";
 
 function getAll (request, reply) {
-  Thumbnail.find().select('-_id -__v').exec(function(err, thumbnails) {
-    if (err) {
-      reply(500, err);
+  Thumbnail.find().select('-_id -__v').exec(function(dbError, thumbnails) {
+    if (dbError) {
+      reply(dbError)
+        .code(500);
     } else {
       reply(thumbnails);
     }
@@ -23,15 +25,25 @@ function getAll (request, reply) {
 }
 
 function viewThumbnail (request, reply) {
-  Thumbnail.findOne({name: request.params.fileName}).select('+imageUrl').exec(function(err, thumbnail) {
-    if (err) {
-      reply(500, err);
-    } else {
-      var context = {
-        imageUrl: thumbnail.imageUrl
-      };
 
-      reply.view('thumbnail', context);
+  Thumbnail.findOne({name: request.params.fileName}).select('+imageUrl').exec(function(execError, thumbnail) {
+
+    if (execError) {
+      reply(execError)
+        .code(500);
+    } else {
+
+      if (!thumbnail) {
+        var error = Boom.badRequest("Thumbnail Not Found");
+        error.output.statusCode = 404;
+        reply(error);
+      } else {
+        var context = {
+          imageUrl: thumbnail.imageUrl
+        };
+
+        reply.view('thumbnail', context);
+      }
     }
   });
 }
@@ -44,10 +56,10 @@ function create (request, reply) {
   var tempFile = fs.createWriteStream(tempPath); // Create write stream to our temporary path
 
   file.pipe(tempFile); // Pipe pdf from payload into temporary file
-  file.on('end', function(err) {
-
-    if (err) {
-      reply(500, err);
+  file.on('end', function(fileError) {
+    if (fileError) {
+      reply(fileError)
+        .code(500);
     } else {
       var thumbName = name.replace(/\.(pdf)$/, '') + "_thumb_";
 
@@ -57,12 +69,13 @@ function create (request, reply) {
       var printFileNames = "ls ./public/thumbnails | grep " + thumbName;
 
       // Use exec over spawn since we're not waiting on data
-      exec(convert + " && " + printFileNames, function(err, stdout, stderr) {
+      exec(convert + " && " + printFileNames, function(execError, stdout, stderr) {
 
         removeLocal(tempPath); // Remove local copy of pdf file
 
-        if (err) {
-          reply(500, err);
+        if (execError) {
+          reply(execError)
+            .code(500);
         } else {
           var thumbnail;
           var thumbnails = [];
@@ -80,9 +93,10 @@ function create (request, reply) {
             }
           });
 
-          Thumbnail.create(thumbnails, function(err) {
-            if (err) {
-              reply(500, err);
+          Thumbnail.create(thumbnails, function(dbError) {
+            if (dbError) {
+              reply(dbError)
+                .code(500);
             }
 
             reply(thumbnails);
@@ -110,9 +124,9 @@ function uploadToAWS (fileName) {
     ContentType: 'image/png' // so aws lets us view image
   };
 
-  s3Bucket.putObject(data, function(err){
-      if (err) {
-        console.err("upload", err);
+  s3Bucket.putObject(data, function(s3Error){
+      if (s3Error) {
+        console.err("upload", s3Error);
       }
 
       removeLocal(filePath); // remove thumbnails stored locally
@@ -120,9 +134,9 @@ function uploadToAWS (fileName) {
 }
 
 function removeLocal (filePath) {
-  fs.unlink(filePath, function (err) {
-    if (err) {
-        console.err("unlink", err);
+  fs.unlink(filePath, function (fileError) {
+    if (fileError) {
+        console.err("unlink", fileError);
     }
   });
 }

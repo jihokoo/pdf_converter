@@ -44,7 +44,7 @@ lab.experiment("Thumbnails Controller", function() {
 
     lab.test("should reply with a thumbnail if there is one in the DB", function(done) {
       var thumbnailOne = new Thumbnail({
-        name: "LobLogo_thumb_1",
+        name: "LobLogo_thumb_1.png",
         url: "http://localhost:8000/thumbs/LobLogo_thumb_1.png",
         imageUrl: "https://s3-us-west-1.amazonaws.com/jihokoo-miscellaneous/Thumbnails/LobLogo_thumb_1.png"
       });
@@ -73,7 +73,7 @@ lab.experiment("Thumbnails Controller", function() {
 
     lab.test("should be able to reply with multiple thumbnails", function(done) {
       var thumbnailTwo = new Thumbnail({
-        name: "LobLogo_thumb_2",
+        name: "LobLogo_thumb_2.png",
         url: "http://localhost:8000/thumbs/LobLogo_thumb_2.png",
         imageUrl: "https://s3-us-west-1.amazonaws.com/jihokoo-miscellaneous/Thumbnails/LobLogo_thumb_2.png"
       });
@@ -92,12 +92,57 @@ lab.experiment("Thumbnails Controller", function() {
           code.expect(result).to.be.instanceof(Array);
           code.expect(result).to.have.length(2);
 
-          code.expect(result[0].name).to.equal("LobLogo_thumb_1");
+          code.expect(result[0].name).to.equal("LobLogo_thumb_1.png");
           code.expect(result[1].name).to.equal(thumbnailTwo.name);
           code.expect(result[1].url).to.equal(thumbnailTwo.url);
           done();
         });
 
+      });
+    });
+  });
+
+  lab.experiment("GET /thumbs/{fileName}", function() {
+    lab.test("should be able to render a Thumbnail", function(done) {
+      var options = {
+        method: "GET",
+        url: "/thumbs/LobLogo_thumb_1.png",
+      };
+
+      server.inject(options, function(response) {
+        code.expect('Content-Type', /html/);
+        code.expect(response.statusCode).to.equal(200);
+
+        done();
+      });
+    });
+
+    lab.test("should return 400 when fileName paramter has extensions other than .png", function(done) {
+      var options = {
+        method: "GET",
+        url: "/thumbs/LobLogo_thumb_1.jpg",
+      };
+
+      server.inject(options, function(response) {
+        var result = response.result;
+        code.expect(response.statusCode).to.equal(400);
+        code.expect(result.error).to.equal("Bad Request");
+        done();
+      });
+    });
+
+    lab.test("should return 404 when thumbnail not found", function(done) {
+      var options = {
+        method: "GET",
+        url: "/thumbs/LobLogo_thumb_3.png",
+      };
+
+      server.inject(options, function(response) {
+        var result = response.result;
+        code.expect(response.statusCode).to.equal(404);
+        code.expect(result.error).to.equal("Bad Request");
+        code.expect(result.message).to.equal("Thumbnail Not Found");
+        done();
       });
     });
   });
@@ -143,6 +188,39 @@ lab.experiment("Thumbnails Controller", function() {
         code.expect(thumbnailOne.url).to.equal("http://localhost:8000/thumbs/test_thumb_0.png");
         code.expect(thumbnailTwo.name).to.equal("test_thumb_1.png");
         code.expect(thumbnailTwo.url).to.equal("http://localhost:8000/thumbs/test_thumb_1.png");
+        done();
+      });
+    });
+
+    lab.test("should respond with 400 when file does not have .pdf extension", function(done) {
+
+      var file = "Incorrect File";
+      var boundary = Math.random();
+
+      var headers = {
+          'Content-Type': 'multipart/form-data; boundary='+ boundary
+      };
+
+      // set payload for multipart/form-data with correct fields
+      var payload = '--'+ boundary +'\r\n' +
+        'Content-Disposition: form-data; name="file"; filename="test.docx"\r\n' +
+        'Content-Type: application/pdf\r\n' +
+        '\r\n' +
+        file + '\r\n' +
+        '--'+ boundary +'--';
+
+      var options = {
+        method: "POST",
+        url: "/thumbs",
+        headers: headers,
+        payload: payload
+      };
+
+      server.inject(options, function(response) {
+        var result = response.result;
+
+        code.expect(response.statusCode).to.equal(400);
+        code.expect(result.error).to.equal("Bad Request");
         done();
       });
     });

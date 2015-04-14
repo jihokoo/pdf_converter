@@ -4,19 +4,19 @@ var path = require('path'),
 // separate db for dev and test
 module.exports = {
   development: {
-    db: 'mongodb://localhost/lob_dev',
+    db: 'mongodb://localhost/jhk_pdf_dev',
     root: rootPath,
     port: 8000,
     app: {
-      name: 'Lob Interview Project'
+      name: 'PDF to Thumbnail Converter'
     },
   },
   test: {
-    db: 'mongodb://localhost/lob_test',
+    db: 'mongodb://localhost/jhk_pdf_test',
     root: rootPath,
     port: 8000,
     app: {
-      name: 'Lob Interview Project'
+      name: 'PDF to Thumbnail Converter'
     }
   }
 };

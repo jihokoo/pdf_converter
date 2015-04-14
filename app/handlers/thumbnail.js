@@ -7,7 +7,7 @@ var mongoose = require("mongoose"),
 // Module to stream files to s3
 // Upload to s3 to avoid storing locally and taking up space
 var AWS = require('aws-sdk');
-AWS.config.loadFromPath('./s3_config.json');
+AWS.config.loadFromPath('./config/s3_config.json');
 var s3Bucket = new AWS.S3( { params: {Bucket: 'jihokoo-miscellaneous'} } );
 
 var s3ThumbnailUrl = "https://s3-us-west-1.amazonaws.com/jihokoo-miscellaneous/Thumbnails/";

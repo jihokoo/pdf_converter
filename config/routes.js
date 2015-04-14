@@ -33,7 +33,6 @@ var routes = [
           file: Joi.object({
             hapi: Joi.object({
               filename: Joi.string().min(1).regex(/^.*\.(pdf)$/).required()
-              // http://stackoverflow.com/questions/21823379/how-to-upload-files-using-nodejs-and-hapi
             }).unknown()
           }).unknown()
         }

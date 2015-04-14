@@ -1,5 +1,5 @@
 {
-  "name": "thumb_coding_challenge",
+  "name": "pdf_converter",
   "version": "0.0.0",
   "description": "lob interview project",
   "main": "index.js",
@@ -24,11 +24,11 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/jihokoo/thumb_coding_challenge.git"
+    "url": "https://github.com/jihokoo/pdf_converter.git"
   },
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/jihokoo/thumb_coding_challenge/issues"
+    "url": "https://github.com/jihokoo/pdf_converter/issues"
   },
-  "homepage": "https://github.com/jihokoo/thumb_coding_challenge"
+  "homepage": "https://github.com/jihokoo/pdf_converter"
 }

@@ -1,6 +1,7 @@
 var path = require('path'),
   rootPath = path.normalize(__dirname + '/..');
 
+// separate db for dev and test
 module.exports = {
   development: {
     db: 'mongodb://localhost/lob_dev',

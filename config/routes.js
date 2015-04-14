@@ -20,7 +20,7 @@ var routes = [
     config: {
       validate: {
         params: {
-          fileName: Joi.string().min(1).regex(/^.*\.(png)$/)
+          fileName: Joi.string().min(1).regex(/^.*\.(png)$/) // validate file name has png extension
         }
       }
     }
@@ -39,7 +39,7 @@ var routes = [
         payload: {
           file: Joi.object({
             hapi: Joi.object({
-              filename: Joi.string().min(1).regex(/^.*\.(pdf)$/).required()
+              filename: Joi.string().min(1).regex(/^.*\.(pdf)$/).required() // validate file name has pdf extension
             }).unknown()
           }).unknown()
         }

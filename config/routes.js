@@ -1,7 +1,13 @@
+var IndexHandler = require("../app/handlers/index.js");
 var ThumbnailHandler = require("../app/handlers/thumbnail.js");
 var Joi  = require('joi');
 
 var routes = [
+  {
+    path: "/",
+    method: "GET",
+    handler: IndexHandler.render
+  },
   {
     path: "/thumbs",
     method: "GET",
